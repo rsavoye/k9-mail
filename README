@@ -18,9 +18,4 @@ after they get imported as 'library', rename them.
 To buuld, use eclipse or type 'ant debug' at the top level. To install
 the package, it must first be removed, do that like this:
     
-    adb uninstall com.fsck.k9
-
-Then install it like this:
-
-     adb install bin/k9-mail.apk
-
+    adb install -r bin/k9-mail.apk

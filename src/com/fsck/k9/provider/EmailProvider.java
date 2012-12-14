@@ -152,7 +152,9 @@ public class EmailProvider extends ContentProvider {
         public static final String FLAGGED = "flagged";
         public static final String ANSWERED = "answered";
         public static final String FORWARDED = "forwarded";
-    }
+        public static final String SPAM_FLAG = "x_spam_flag";
+        public static final String SPAM_STATUS = "x_spam_status";
+        }
 
     private interface InternalMessageColumns extends MessageColumns {
         public static final String DELETED = "deleted";

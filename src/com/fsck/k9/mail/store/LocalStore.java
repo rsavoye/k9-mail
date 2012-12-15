@@ -97,9 +97,13 @@ public class LocalStore extends Store implements Serializable {
      */
     static private String GET_MESSAGES_COLS =
         "subject, sender_list, date, uid, flags, messages.id, to_list, cc_list, "
-        + "bcc_list, reply_to_list, attachment_count, internal_date, message_id, folder_id, preview, thread_root, thread_parent, deleted, read, flagged, answered, forwarded ";
+        + "bcc_list, reply_to_list, attachment_count, internal_date, message_id, "
+	    + "folder_id, preview, thread_root, thread_parent, deleted, read, flagged, answered, forwarded, "
+	    + "x_spam_status, x_spam_flag ";
 
-    static private String GET_FOLDER_COLS = "folders.id, name, SUM(read=0), visible_limit, last_updated, status, push_state, last_pushed, SUM(flagged), integrate, top_group, poll_class, push_class, display_class";
+    static private String GET_FOLDER_COLS = "folders.id, name, SUM(read=0), visible_limit, last_updated, "
+    		+ "status, push_state, last_pushed, SUM(flagged), integrate, top_group, poll_class, push_class, "
+    		+ "display_class";
 
     private static final String[] UID_CHECK_PROJECTION = { "uid" };
 
@@ -117,7 +121,7 @@ public class LocalStore extends Store implements Serializable {
      */
     private static final int FLAG_UPDATE_BATCH_SIZE = 500;
 
-    public static final int DB_VERSION = 46;
+    public static final int DB_VERSION = 47;
 
     protected String uUid = null;
 
@@ -450,6 +454,10 @@ public class LocalStore extends Store implements Serializable {
                                     throw e;
                                 }
                             }
+                        }
+                        if (db.getVersion() == 47) {
+                        	db.execSQL("ALTER TABLE messages ADD x_spam_status TEXT default No");
+                        	db.execSQL("ALTER TABLE messages ADD x_spam_flag TEXT default No");
                         }
                         if (db.getVersion() < 46) {
                             db.execSQL("ALTER TABLE messages ADD read INTEGER default 0");
@@ -2430,6 +2438,9 @@ public class LocalStore extends Store implements Serializable {
                                     cv.put("internal_date",  message.getInternalDate() == null
                                            ? System.currentTimeMillis() : message.getInternalDate().getTime());
                                     cv.put("mime_type", message.getMimeType());
+                                    cv.put("x_spam_flag", message.getSpamFlag());
+				    				cv.put("x_spam_status", message.getSpamStatus());
+				    				
                                     cv.put("empty", 0);
 
                                     String messageId = message.getMessageId();
@@ -2509,6 +2520,7 @@ public class LocalStore extends Store implements Serializable {
                                            + "folder_id = ?, to_list = ?, cc_list = ?, bcc_list = ?, "
                                            + "html_content = ?, text_content = ?, preview = ?, reply_to_list = ?, "
                                            + "attachment_count = ?, read = ?, flagged = ?, answered = ?, forwarded = ? "
+                                           + ""
                                            + "WHERE id = ?",
                                            new Object[] {
                                                message.getUid(),
@@ -3449,6 +3461,9 @@ public class LocalStore extends Store implements Serializable {
             super.setRecipients(RecipientType.TO, mTo);
             super.setRecipients(RecipientType.CC, mCc);
             super.setRecipients(RecipientType.BCC, mBcc);
+	        super.setSpamFlag(mSpamFlag);
+	        
+	        super.setSpamStatus(mSpamStatus);
             if (mMessageId != null) super.setMessageId(mMessageId);
 
             mMessageDirty = false;

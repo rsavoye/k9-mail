@@ -23,6 +23,8 @@ import org.apache.james.mime4j.stream.BodyDescriptor;
 import org.apache.james.mime4j.stream.Field;
 import org.apache.james.mime4j.stream.MimeConfig;
 
+import android.util.Log;
+
 import com.fsck.k9.mail.Address;
 import com.fsck.k9.mail.Body;
 import com.fsck.k9.mail.BodyPart;
@@ -51,6 +53,9 @@ public class MimeMessage extends Message {
     protected Date mSentDate;
     protected SimpleDateFormat mDateFormat;
 
+    protected String mSpamFlag;
+    protected String mSpamStatus;
+    
     protected Body mBody;
     protected int mSize;
 
@@ -85,6 +90,9 @@ public class MimeMessage extends Message {
 
         mBody = null;
 
+        mSpamFlag = null;
+        mSpamStatus= null;
+        
         MimeConfig parserConfig  = new MimeConfig();
         parserConfig.setMaxHeaderLen(-1); // The default is a mere 10k
         parserConfig.setMaxLineLen(-1); // The default is 1000 characters. Some MUAs generate
@@ -597,4 +605,28 @@ public class MimeMessage extends Message {
     public boolean hasAttachments() {
         return false;
     }
+
+
+	@Override
+	public String getSpamFlag() {
+		// TODO Auto-generated method stub
+		return mSpamFlag;
+	}
+
+
+	@Override
+	public String getSpamStatus() {
+		// TODO Auto-generated method stub
+		return mSpamStatus;
+	}
+
+	public void setSpamFlag(String flag) {
+		// TODO Auto-generated method stub
+		mSpamFlag = flag;
+	}
+	
+	public void setSpamStatus(String status) {
+		// TODO Auto-generated method stub
+		mSpamStatus = status;
+	}
 }

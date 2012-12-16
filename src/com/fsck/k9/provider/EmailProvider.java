@@ -84,6 +84,8 @@ public class EmailProvider extends ContentProvider {
         MessageColumns.FLAGGED,
         MessageColumns.ANSWERED,
         MessageColumns.FORWARDED,
+	MessageColumns.SPAM_FLAG,
+	MessageColumns.SPAM_STATUS,
         InternalMessageColumns.DELETED,
         InternalMessageColumns.EMPTY,
         InternalMessageColumns.TEXT_CONTENT,

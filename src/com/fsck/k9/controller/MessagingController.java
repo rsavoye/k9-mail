@@ -950,7 +950,15 @@ public class MessagingController implements Runnable {
             if (account.syncRemoteDeletions()) {
                 ArrayList<Message> destroyMessages = new ArrayList<Message>();
                 for (Message localMessage : localMessages) {
-                    if (remoteUidMap.get(localMessage.getUid()) == null) {
+                	if (localMessage.getSpamFlag().equals("YES")) {
+                		Log.d("K9-Mail", "Message " +  Address.toString(localMessage.getFrom()) + " is SPAM");
+                		destroyMessages.add(localMessage);
+                	} else {
+                		Log.d("K9-Mail", "Message " +  Address.toString(localMessage.getFrom()) + " is not SPAM");
+                	}
+                	// Log.d("K9-Mail", "SPAM FLAG: " + localMessage.getSpamFlag());
+                	// Log.d("K9-Mail", "SPAM STATUS: " + localMessage.getSpamStatus());
+                     if (remoteUidMap.get(localMessage.getUid()) == null) {
                         destroyMessages.add(localMessage);
                     }
                 }

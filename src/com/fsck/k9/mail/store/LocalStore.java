@@ -3410,9 +3410,6 @@ public class LocalStore extends Store implements Serializable {
             this.mSpamStatus = (cursor.isNull(22)) ? "Noo" : cursor.getString(22);
             this.mSpamFlag = (cursor.isNull(23)) ? "Noo" : cursor.getString(23);           
              
-            Log.d("K9-Mail", "SpamStatus: " + this.getSpamStatus());
-            Log.d("K9-Mail", "SpamFlag: " + this.getSpamFlag());
-
             setFlagInternal(Flag.DELETED, deleted);
             setFlagInternal(Flag.SEEN, read);
             setFlagInternal(Flag.FLAGGED, flagged);

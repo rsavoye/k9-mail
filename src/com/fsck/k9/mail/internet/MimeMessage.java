@@ -611,10 +611,14 @@ public class MimeMessage extends Message {
 
 	@Override
 	public String getSpamFlag() {
-		String flag = MimeUtility.unfold(getFirstHeader("X-Spam-Flag"));
-		Log.d("K9-Mail", "getSpamFlag(): " + flag);
-		if (flag != null) {
-			mSpamFlag = flag;
+		if (mSpamFlag == null) {
+			String flag = MimeUtility.unfold(getFirstHeader("X-Spam-Flag"));
+			// Log.d("K9-Mail", "getSpamFlag(): " + flag);
+			if (flag != null) {
+				mSpamFlag = flag;
+			} else {
+				mSpamFlag = "NO";
+			}
 		}
 		return mSpamFlag;
 	}
@@ -622,26 +626,37 @@ public class MimeMessage extends Message {
 
 	@Override
 	public String getSpamStatus() {
-		String status = MimeUtility.unfold(getFirstHeader("X-Spam-Status"));
-		Log.d("K9-Mail", "getSpamStatus(): " + status);
-		if (status != null) {
-			mSpamStatus = status;
+		if (mSpamStatus == null) {
+			String status = MimeUtility.unfold(getFirstHeader("X-Spam-Status"));
+			// Log.d("K9-Mail", "getSpamStatus(): " + status);
+			if (status != null) {
+				mSpamStatus = status;
+			} else {
+				mSpamStatus = "No";
+			}
 		}
 		return mSpamStatus;
 	}
 	
-
 	public void setSpamFlag(String flag) {
-		mSpamFlag = MimeUtility.unfold(getFirstHeader("X-Spam-Flag"));
+		// mSpamFlag = MimeUtility.unfold(getFirstHeader("X-Spam-Flag"));
         try {
-			setHeader("X-Spam-Flag", mSpamFlag);
+			setHeader("X-Spam-Flag", flag);
 		} catch (UnavailableStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        mSpamFlag = flag;
 	}
 	
 	public void setSpamStatus(String status) {
-		mSpamStatus = MimeUtility.unfold(getFirstHeader("X-Spam-Status"));
+		// mSpamStatus = MimeUtility.unfold(getFirstHeader("X-Spam-Status"));
+        try {
+			setHeader("X-Spam-Status", status);
+		} catch (UnavailableStorageException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        mSpamStatus = status;
 	}
 }
